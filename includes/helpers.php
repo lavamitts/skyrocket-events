@@ -12,7 +12,7 @@ function is_event_private(string $title): bool
  * Get the date string for the nth occurrence of a weekday in a given month.
  * If the nth week exceeds the actual number of weeks in that month, returns null.
  */
-function pavilion_get_nth_occurrence_date(string $year_month, int $weekday, int $n, DateTimeZone $timezone): ?string
+function skyrocket_get_nth_occurrence_date(string $year_month, int $weekday, int $n, DateTimeZone $timezone): ?string
 {
     $first = DateTimeImmutable::createFromFormat('!Y-m-d', $year_month . '-01', $timezone);
     if (!$first) {
