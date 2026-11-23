@@ -1,0 +1,49 @@
+// Colours
+$calendar-accent-colour: #0047ab;
+$calendar-recessive-colour: #f0f0f0;
+$calendar-keylines: #999999;
+$calendar-accent-colour-10-percent: #e6ecf5;
+$calendar-accent-colour-20-percent: #ccd9ea;
+$calendar-time-colour: #b84a22;
+$calendar-today-day-colour: #f00000;
+$calendar-today-colour: #f0f0f0;
+
+// Button colours
+$calendar-button-background: #0047ab;
+$calendar-button-background-hover: #b84a22;
+$calendar-button-foreground: #ffffff;
+$calendar-button-foreground-hover: #ffffff;
+
+// View changing buttons
+$calendar-button-view-active: #0047ab;
+$calendar-button-view-inactive: #666666;
+
+// Breakpoints
+$tiny-breakpoint: 450px;
+$mobile-breakpoint: 689px;
+$blocksy-breakpoint: 782px;
+$calendar-breakpoint: 890px;
+$tablet-breakpoint: 999px;
+$large-breakpoint: 1279px;
+
+// Font sizes - desktop
+$font-size-vlarge-desktop: 32px;
+$font-size-large-desktop: 24px;
+$font-size-normal-desktop: 18px;
+$font-size-medium-desktop: $font-size-normal-desktop;
+$font-size-small-desktop: 16px;
+
+// Font sizes - tablet
+$font-size-vlarge-tablet: 28px;
+$font-size-large-tablet: 20px;
+$font-size-normal-tablet: 16px;
+$font-size-medium-tablet: $font-size-normal-tablet;
+$font-size-small-tablet: 14px;
+
+// Font sizes - mobile
+$font-size-vlarge-mobile: 24px;
+$font-size-large-mobile: 20px;
+$font-size-normal-mobile: 15px;
+$font-size-medium-mobile: $font-size-normal-mobile;
+$font-size-small-mobile: 13px;
+$font-size-tiny-mobile: 11px;

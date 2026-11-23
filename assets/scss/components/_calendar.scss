@@ -1,0 +1,193 @@
+@use "variables" as v;
+@use "mixins" as m;
+
+$cell-header-height-default: 3rem;
+$cell-height-default: 5rem;
+
+.skyrocket-calendar {
+    width: 100%;
+    font-size: 0.8rem;
+
+    &__views {
+        margin-bottom: 1em;
+        display: flex;
+        gap: 10px;
+        @media (max-width: v.$calendar-breakpoint) {
+            justify-content: center;
+        }
+    }
+
+    &__nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+        font-size: 16px;
+
+        strong {
+            text-align: center;
+        }
+
+        a {
+            text-decoration: none;
+            padding: 0.25rem 0.5rem;
+        }
+    }
+
+    &__list-group {
+        margin-bottom: 1.5rem;
+        align-items: start;
+        display: grid;
+        grid-template-columns: 80px 1fr;
+        gap: 1rem;
+
+        h4 {
+            margin-bottom: 0.5em;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 4px;
+            display: none;
+        }
+
+        $device-corner-radius: 5px;
+
+        // The calendar symbol on the list view
+        &_day_graphical_device {
+            align-self: start;
+            border-radius: $device-corner-radius;
+            max-width: 5rem;
+            @include m.box-drop-shadow;
+
+            .sclgddd-month {
+                background-color: v.$calendar-accent-colour;
+                border-top-left-radius: $device-corner-radius;
+                border-top-right-radius: $device-corner-radius;
+                color: white;
+                font-weight: bold;
+                text-align: center;
+                text-transform: uppercase;
+            }
+            .sclgddd-number-day {
+                background-color: v.$calendar-accent-colour-20-percent;
+                border-bottom-left-radius: $device-corner-radius;
+                border-bottom-right-radius: $device-corner-radius;
+                text-align: center;
+            }
+            .sclgddd-number {
+                color: black;
+                font-size: larger;
+                font-weight: bold;
+                padding-bottom: 0.25rem;
+                padding-top: 0.25rem;
+            }
+            .sclgddd-day {
+                padding-bottom: 0.25rem;
+                text-transform: uppercase;
+            }
+        }
+
+        &_day_graphical_device.sclgddd-today {
+            .sclgddd-month {
+                background-color: v.$calendar-today-day-colour;
+            }
+            .sclgddd-number-day {
+                background-color: rgba(v.$calendar-today-day-colour, 0.1);
+            }
+        }
+    }
+
+    &__grid {
+        width: 100%;
+        table-layout: fixed;
+        border-collapse: collapse;
+        font-size: inherit;
+        border: 0 !important;
+
+        th,
+        td {
+            border: 1px solid var(--theme-border-color, #ddd);
+            padding: 0.2rem;
+            vertical-align: top;
+            overflow-wrap: anywhere;
+        }
+
+        td.today {
+            background-color: v.$calendar-today-colour;
+        }
+
+        th {
+            text-align: center;
+            font-weight: 600;
+            background-color: v.$calendar-accent-colour;
+            color: white;
+            border-top: 0px !important;
+            height: $cell-header-height-default;
+            vertical-align: middle;
+        }
+
+        $radius: 12px;
+        th:first-of-type {
+            border-top-left-radius: $radius;
+            border-left: 0px !important;
+        }
+        th:last-of-type {
+            border-top-right-radius: $radius;
+            border-right: 0px !important;
+        }
+
+        td {
+            height: $cell-height-default;
+        }
+    }
+
+    &__day {
+        display: block;
+        margin-bottom: 0.2rem;
+        font-weight: 600;
+    }
+
+    &__event {
+        border-radius: 2px;
+        color: inherit;
+        display: block;
+        line-height: 1.3;
+        margin-bottom: 0.2rem;
+        padding: 0.2rem 0.2rem 0.2rem 0;
+        text-decoration: none;
+
+        small {
+            display: block;
+            font-size: 0.85em;
+        }
+
+        small.event-date {
+            color: v.$calendar-time-colour;
+        }
+
+        &:is(a):hover,
+        &:is(a):focus-visible {
+            text-decoration: underline;
+        }
+    }
+}
+
+@media (max-width: v.$blocksy-breakpoint) {
+    #month-grid-button {
+        display: none;
+    }
+}
+
+ul.list-view {
+    list-style: none;
+    padding-left: 0 !important;
+    font-size: 16px;
+
+    li {
+        padding: 0.5rem;
+        list-style-type: none !important;
+
+        strong.list-view-time {
+            // display: block;
+        }
+    }
+}

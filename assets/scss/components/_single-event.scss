@@ -1,0 +1,215 @@
+@use "variables" as v;
+@use "mixins" as m;
+@use "text-mixins" as tm;
+
+.skyrocket-event-detail {
+    padding: 2rem 0 0 0;
+    margin-left: auto;
+    margin-right: auto;
+    margin-inline: auto;
+
+    &__article {
+        padding-bottom: 2rem;
+    }
+
+    &__header {
+        @media (max-width: v.$calendar-breakpoint) {
+            display: block !important;
+        }
+    }
+
+    &__schedule {
+        max-width: 1024px;
+        background: white;
+        border: 1px v.$calendar-keylines solid;
+        border-radius: 10px;
+        margin-bottom: 2.5rem;
+        padding: 0.75rem 1rem;
+        @include m.box-shadow;
+
+        a:hover {
+            color: v.$calendar-time-colour;
+        }
+    }
+
+    &__venue_and_organiser {
+        background-color: v.$calendar-recessive-colour;
+        border: 1px solid silver;
+        border-radius: 10px;
+        margin-top: 4rem;
+        padding: 1rem;
+
+        &__row1 {
+            gap: 2rem;
+            display: grid;
+            @media (min-width: v.$mobile-breakpoint) {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            @media (max-width: v.$mobile-breakpoint) {
+                grid-template-columns: repeat(1, 1fr);
+            }
+        }
+
+        &__row1-single-item {
+            gap: 2rem;
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+        }
+
+        h2,
+        h3 {
+            @include tm.normal-text;
+        }
+    }
+
+    &__schedule,
+    &__organiser {
+        .pavilion-organiser-description {
+            margin-bottom: 1rem;
+        }
+
+        a:not(.button) {
+            text-decoration: underline !important;
+        }
+
+        h2 {
+            margin-top: 0;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    &__back {
+        @media (min-width: v.$calendar-breakpoint) {
+            justify-self: end;
+        }
+        @media (max-width: v.$calendar-breakpoint) {
+            justify-self: start;
+        }
+    }
+
+    figure.wp-block-image {
+        margin-bottom: 1.5rem;
+    }
+}
+
+.skyrocket-event-passed {
+    border-top: 1px silver dotted;
+    padding-top: 0.5rem;
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.skyrocket-event-detail__upcoming {
+    margin-top: 2rem;
+
+    ul {
+        list-style: none !important;
+        list-style-type: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+
+        @media (min-width: v.$blocksy-breakpoint) {
+            max-width: calc(v.$blocksy-breakpoint) !important;
+        }
+    }
+
+    li {
+        list-style-type: none !important;
+        padding: 0.75rem 0 !important;
+        margin: 0 !important;
+        border-bottom: 1px solid v.$calendar-keylines;
+    }
+
+    a {
+        text-decoration: none;
+    }
+}
+
+div.widget_block.ct-widget {
+    a {
+        text-decoration: underline;
+    }
+
+    .skyrocket-calendar {
+        // Hide the calendar navigation in the sidebar
+        &__nav {
+            display: none;
+        }
+
+        // Shrink the fonts and spacing on the calendar list
+        &__list-group {
+            h4 {
+                font-size: 1rem !important;
+                margin-top: 0 !important;
+            }
+
+            ul.list-view {
+                margin-bottom: 0.25rem;
+
+                li {
+                    padding-bottom: 0.125rem;
+                    padding-top: 0.125rem;
+                    span {
+                        display: block;
+                    }
+
+                    a:hover {
+                        span {
+                            text-decoration: underline !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.skyrocket-add-to-calendar {
+    margin-top: 1rem;
+    display: flex;
+    gap: 10px;
+}
+
+// Private events
+.private-event {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 6px;
+    cursor: default;
+
+    &::before {
+        color: goldenrod;
+        content: "";
+        flex: 0 0 12px;
+        width: 12px;
+        height: 12px;
+        margin-top: 2px;
+        background-image: url("../images/event-icon-padlock.svg");
+        background-position: center;
+        background-size: 12px 12px;
+        background-repeat: no-repeat;
+    }
+}
+
+.skyrocket-venue-map-container {
+    position: relative;
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+    margin-top: 1.5rem;
+    border-radius: 4px;
+
+    @media (min-width: v.$calendar-breakpoint) {
+        padding-bottom: 40%;
+    }
+
+    @media (max-width: v.$calendar-breakpoint) {
+        padding-bottom: 75%;
+    }
+}

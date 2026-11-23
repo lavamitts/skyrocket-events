@@ -1,0 +1,49 @@
+.b {
+    font-weight: bold;
+}
+
+$spacing-sizes: (
+    "zero": 0,
+    "one-quarter": 0.25,
+    "half": 0.5,
+    "three-quarters": 0.75,
+    "1": 1,
+    "2": 2,
+    "3": 3,
+    "4": 4,
+    "5": 5
+);
+
+@each $name, $size in $spacing-sizes {
+    .m-#{$name} {
+        margin: #{$size}rem !important;
+    }
+    .mt-#{$name} {
+        margin-top: #{$size}rem !important;
+    }
+    .mr-#{$name} {
+        margin-right: #{$size}rem !important;
+    }
+    .mb-#{$name} {
+        margin-bottom: #{$size}rem !important;
+    }
+    .ml-#{$name} {
+        margin-left: #{$size}rem !important;
+    }
+
+    .p-#{$name} {
+        padding: #{$size}rem !important;
+    }
+    .pt-#{$name} {
+        padding-top: #{$size}rem !important;
+    }
+    .pr-#{$name} {
+        padding-right: #{$size}rem !important;
+    }
+    .pb-#{$name} {
+        padding-bottom: #{$size}rem !important;
+    }
+    .pl-#{$name} {
+        padding-left: #{$size}rem !important;
+    }
+}

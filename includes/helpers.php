@@ -1,4 +1,13 @@
 <?php
+
+function skyrocket_get_site_details(): array
+{
+    return [
+        'title' => get_bloginfo('name'),
+        'slug' => sanitize_title(get_bloginfo('name')),
+    ];
+}
+
 function is_event_private(string $title): bool
 {
     if (str_contains(strtolower($title), "private")) {

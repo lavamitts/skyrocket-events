@@ -1,0 +1,30 @@
+/* Icons */
+$base-padding-left: 30px;
+$admin-padding-left-increment: 25px;
+
+article.pavilion_event {
+    div.icon,
+    p.icon {
+        background-repeat: no-repeat;
+        background-size: 24px 24px;
+        padding-left: $base-padding-left;
+        margin-bottom: 1rem;
+        background-position: 0 2px;
+    }
+
+    div.person,
+    p.person {
+        font-weight: bold;
+        font-variant: small-caps;
+    }
+
+    $icons: (date, email, facebook, instagram, person, phone, price, stars, time, video, web, pdf, document);
+
+    @each $icon in $icons {
+        div.#{$icon},
+        p.#{$icon} {
+            // background-image: url("../images/event-icon-#{$icon}.svg");
+            background-image: url("../images/event-icon-#{$icon}.png");
+        }
+    }
+}

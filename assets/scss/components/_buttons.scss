@@ -1,0 +1,137 @@
+@use "variables" as v;
+@use "mixins" as m;
+
+$icon-size-standard: 24px;
+$icon-size-mobile: 16px;
+$padding-standard: 8px;
+$padding-mobile: 6px;
+
+article.pavilion_event {
+    div.wp-block-button.image-button {
+        a.wp-block-button__link,
+        a.button {
+            background-color: v.$calendar-button-background;
+            color: v.$calendar-button-foreground;
+            background-repeat: no-repeat;
+            text-decoration: none !important;
+            text-align: left !important;
+            border-radius: 10px;
+
+            @media (min-width: v.$calendar-breakpoint) {
+                background-size: $icon-size-standard $icon-size-standard;
+                background-position: $padding-standard $padding-standard;
+                min-height: ($icon-size-standard + (2 * $padding-standard)) !important;
+                height: ($icon-size-standard + (2 * $padding-standard)) !important;
+                padding-left: ($icon-size-standard + (2 * $padding-standard));
+            }
+
+            @media (max-width: v.$calendar-breakpoint) {
+                background-size: $icon-size-mobile $icon-size-mobile;
+                background-position: $padding-mobile $padding-mobile;
+                min-height: ($icon-size-mobile + (2 * $padding-mobile)) !important;
+                height: ($icon-size-mobile + (2 * $padding-mobile)) !important;
+                padding-left: ($icon-size-mobile + (2 * $padding-mobile));
+                font-size: v.$font-size-small-mobile !important;
+            }
+
+            @media (max-width: v.$tiny-breakpoint) {
+                font-size: v.$font-size-tiny-mobile !important;
+            }
+
+            &:hover {
+                background-color: v.$calendar-button-background-hover !important;
+                color: v.$calendar-button-foreground-hover !important;
+                @include m.box-shadow;
+            }
+        }
+
+        &.secondary {
+            a.wp-block-button__link,
+            a.button {
+                background-color: v.$calendar-recessive-colour;
+                color: black;
+            }
+        }
+    }
+
+    // Apply image to the Google button
+    div.wp-block-button.google-button {
+        a.wp-block-button__link {
+            background-image: url("../images/google-icon-simple.png");
+        }
+    }
+
+    // Apply image to the back button
+    div.wp-block-button.back-button {
+        a.wp-block-button__link {
+            background-image: url("../images/back-icon-simple-inverted.svg");
+
+            &:hover {
+                background-color: v.$calendar-button-background-hover;
+                color: v.$calendar-button-foreground-hover;
+                background-image: url("../images/back-icon-simple.svg");
+            }
+        }
+    }
+
+    // Apply image to the ICS button
+    div.wp-block-button.ics-button {
+        a.wp-block-button__link {
+            background-image: url("../images/calendar-icon-simple.png");
+        }
+    }
+}
+// Calendar buttons
+$calendar-button-width: 8.5rem;
+
+.skyrocket-calendar__views {
+    background-color: v.$calendar-recessive-colour;
+    border-radius: 10px;
+    padding: 0.5rem;
+
+    // The button for the currently active view
+    .button.button-primary {
+        background-color: v.$calendar-button-view-active;
+        color: white;
+    }
+
+    // The button for the inactive views
+    .button:not(.button-primary) {
+        background-color: v.$calendar-button-view-inactive;
+        color: white;
+    }
+
+    // Hover for both active and inactive view buttons
+    .button.button-primary:hover,
+    .button:not(.button-primary):hover {
+        background-color: v.$calendar-button-background-hover !important;
+        color: white !important;
+    }
+
+    $button-image-size: 24px;
+    $button-margin-x: 6px;
+    $button-margin-y: 8px;
+
+    @media (min-width: v.$calendar-breakpoint) {
+        a {
+            background-position: $button-margin-x 50%;
+            background-repeat: no-repeat;
+            background-size: $button-image-size $button-image-size;
+            padding-left: calc($button-image-size + ($button-margin-x * 2));
+        }
+
+        // Icons for view buttons
+        a#month-grid-button {
+            background-image: url("../images/calendar-icon-simple.svg");
+            min-width: $calendar-button-width;
+        }
+        a#month-list-button {
+            background-image: url("../images/list-icon-simple.svg");
+            min-width: $calendar-button-width;
+        }
+        a#day-list-button {
+            background-image: url("../images/day-icon-simple.svg");
+            min-width: $calendar-button-width;
+        }
+    }
+}

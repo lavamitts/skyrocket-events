@@ -1,0 +1,25 @@
+{
+  "name": "skyrocket-events",
+  "version": "1.0.0",
+  "description": "Skyrocket Events - Custom event management and calendar",
+  "main": "index.js",
+  "scripts": {
+    "build:css": "sass assets/scss:assets/css --style=expanded --no-source-map",
+    "watch:css": "sass --watch assets/scss:assets/css --style=expanded --no-source-map"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lavamitts/skyrocket-events.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/lavamitts/skyrocket-events/issues"
+  },
+  "homepage": "https://github.com/lavamitts/skyrocket-events#readme",
+  "devDependencies": {
+    "sass": "^1.108.1"
+  }
+}

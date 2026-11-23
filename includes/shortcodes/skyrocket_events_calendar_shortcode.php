@@ -13,6 +13,9 @@ defined('ABSPATH') || exit;
  */
 function skyrocket_events_calendar_shortcode($atts): string
 {
+    $site = skyrocket_get_site_details();
+    $slug = "skyrocket-events-" . $site['slug'];
+
     $PREVIOUS_ARROW = "&#9664;";
     $NEXT_ARROW = "&#9658;";
 
@@ -539,7 +542,7 @@ function skyrocket_events_calendar_shortcode($atts): string
     <?php endif; ?>
 
     <div
-        class="skyrocket-calendar skyrocket-calendar--<?php echo esc_attr($view); ?><?php echo $is_compact ? ' skyrocket-calendar--compact' : ''; ?>">
+        class="skyrocket-calendar <?= $slug ?>  skyrocket-calendar--<?php echo esc_attr($view); ?><?php echo $is_compact ? ' skyrocket-calendar--compact' : ''; ?>">
         <?php if (!$is_compact): ?>
             <div class="skyrocket-calendar__views">
                 <a id="month-grid-button" href="<?php echo esc_url($grid_url); ?>"
@@ -561,6 +564,7 @@ function skyrocket_events_calendar_shortcode($atts): string
                 <a href="<?php echo esc_url($next_url); ?>" aria-label="Next day" class="next-day">Next day <?= $NEXT_ARROW ?></a>
             </div>
 
+            <!-- <p>this is the day view</p> -->
             <div class="skyrocket-calendar__day-view" style="margin-top: 1.5em;">
                 <?php $day_key = $first->format('Y-m-d'); ?>
                 <?php if (empty($days[$day_key])): ?>
@@ -611,6 +615,7 @@ function skyrocket_events_calendar_shortcode($atts): string
                 <a href="<?php echo esc_url($next_url); ?>" aria-label="Next month" class="next-month">Next month <?= $NEXT_ARROW ?></a>
             </div>
 
+            <!-- <p>This is the month list view</p> -->
             <div class="skyrocket-calendar__list-view" style="margin-top: 1.5em;">
                 <?php
                 $today_string = $today->format('Y-m-d');
@@ -627,36 +632,53 @@ function skyrocket_events_calendar_shortcode($atts): string
                     <p>No upcoming events scheduled for this month.</p>
                 <?php else: ?>
                     <?php foreach ($days as $date_key => $day_events): ?>
-                        <?php $day_dt = DateTimeImmutable::createFromFormat('!Y-m-d', $date_key, $timezone); ?>
+                        <?php
+                        $day_dt = DateTimeImmutable::createFromFormat('!Y-m-d', $date_key, $timezone);
+                        $now_dt = new DateTimeImmutable('now', $timezone);
+                        $is_today = $day_dt instanceof DateTimeImmutable
+                            && $day_dt->format('Y-m-d') === $now_dt->format('Y-m-d');
+                        $day = $day_dt ? $day_dt->format('D') : ''; // Mon, Tue, Wed
+                        $number = $day_dt ? $day_dt->format('j') : ''; // 1, 2, 24
+                        $month = $day_dt ? $day_dt->format('M') : ''; // Jan, Feb, Mar
+                        ?>
                         <div class="skyrocket-calendar__list-group">
-                            <h4>
-                                <?php echo esc_html($day_dt ? $day_dt->format('l, j F Y') : $date_key); ?>
-                            </h4>
-                            <ul class="list-view">
-                                <?php foreach ($day_events as $item): ?>
-                                    <li>
-                                        <?php $is_event_private = is_event_private($item['title']); ?>
-                                        <?php if ($is_event_private) { ?>
-                                            <strong>
-                                                <?php echo esc_html($item['start']->format('H:i') . ' - ' . $item['end']->format('H:i')); ?>
-                                            </strong>:
-                                            <span class="private-event">
-                                                <?php echo esc_html($item['title']); ?>
-                                            </span>
-
-                                        <?php } else { ?>
-                                            <a href="<?php echo esc_url($item['url']); ?>" style="text-decoration: none; color: inherit;">
+                            <div class="skyrocket-calendar__list-group_day_graphical_device<?php echo $is_today ? ' sclgddd-today' : ''; ?>">
+                                <div class="sclgddd-month"><?= $month ?></div>
+                                <div class="sclgddd-number-day">
+                                    <div class="sclgddd-number"><?= $number ?></div>
+                                    <div class="sclgddd-day"><?= $day ?></div>
+                                </div>
+                            </div>
+                            <div>
+                                <h4>
+                                    <?php echo esc_html($day_dt ? $day_dt->format('l, j F Y') : $date_key); ?>
+                                </h4>
+                                <ul class="list-view">
+                                    <?php foreach ($day_events as $item): ?>
+                                        <li>
+                                            <?php $is_event_private = is_event_private($item['title']); ?>
+                                            <?php if ($is_event_private) { ?>
                                                 <strong>
                                                     <?php echo esc_html($item['start']->format('H:i') . ' - ' . $item['end']->format('H:i')); ?>
                                                 </strong>:
-                                                <span>
+                                                <span class="private-event">
                                                     <?php echo esc_html($item['title']); ?>
                                                 </span>
-                                            </a>
-                                        <?php } ?>
-                                    </li>
-                                <?php endforeach; ?>
-                            </ul>
+
+                                            <?php } else { ?>
+                                                <a href="<?php echo esc_url($item['url']); ?>" style="text-decoration: none; color: inherit;">
+                                                    <strong class="list-view-time">
+                                                        <?php echo esc_html($item['start']->format('H:i') . ' - ' . $item['end']->format('H:i')); ?>
+                                                    </strong>:
+                                                    <span>
+                                                        <?php echo esc_html($item['title']); ?>
+                                                    </span>
+                                                </a>
+                                            <?php } ?>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
                         </div>
                     <?php endforeach; ?>
                 <?php endif; ?>
@@ -754,23 +776,25 @@ function skyrocket_events_calendar_shortcode($atts): string
                                                     ?>
                                                 </small>
 
-                                                <span class="private-event"><?php echo esc_html($item['title']); ?></span></span>
+                                                <span class="private-event"><?php echo esc_html($item['title']); ?></span>
+                                            </span>
 
                                         <?php } else { ?>
-                                            <small class="event-date">
-                                                <?php
-                                                echo esc_html(
-                                                    $item['start']->format('H:i')
-                                                    . ' - '
-                                                    . $item['end']->format('H:i')
-                                                );
-                                                ?>
-                                            </small>
-                                            <a class="skyrocket-calendar__event" href="<?php echo esc_url($item['url']); ?>"
-                                                title="<?php echo esc_attr($item['title']); ?>">
-
-                                                <?php echo esc_html($item['title']); ?>
-                                            </a>
+                                            <span class="skyrocket-calendar__event">
+                                                <small class="event-date">
+                                                    <?php
+                                                    echo esc_html(
+                                                        $item['start']->format('H:i')
+                                                        . ' - '
+                                                        . $item['end']->format('H:i')
+                                                    );
+                                                    ?>
+                                                </small>
+                                                <a href="<?php echo esc_url($item['url']); ?>"
+                                                    title="<?php echo esc_attr($item['title']); ?>">
+                                                    <?php echo esc_html($item['title']); ?>
+                                                </a>
+                                            </span>
                                         <?php } ?>
                                     <?php endforeach; ?>
                                 <?php endif; ?>

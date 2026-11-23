@@ -1,0 +1,73 @@
+@use "variables" as v;
+
+@mixin vlarge-text() {
+    @media screen and (min-width: v.$tablet-breakpoint) {
+        font-size: v.$font-size-vlarge-desktop !important;
+    }
+    @media screen and (min-width: v.$mobile-breakpoint) and (max-width: v.$tablet-breakpoint) {
+        font-size: v.$font-size-vlarge-tablet !important;
+    }
+    @media screen and (max-width: v.$mobile-breakpoint) {
+        font-size: v.$font-size-vlarge-mobile !important;
+    }
+}
+
+@mixin large-text() {
+    @media screen and (min-width: v.$tablet-breakpoint) {
+        font-size: v.$font-size-large-desktop !important;
+    }
+    @media screen and (min-width: v.$mobile-breakpoint) and (max-width: v.$tablet-breakpoint) {
+        font-size: v.$font-size-large-tablet !important;
+    }
+    @media screen and (max-width: v.$mobile-breakpoint) {
+        font-size: v.$font-size-large-mobile !important;
+    }
+}
+
+@mixin normal-text() {
+    @media screen and (min-width: v.$tablet-breakpoint) {
+        font-size: v.$font-size-normal-desktop !important;
+    }
+    @media screen and (min-width: v.$mobile-breakpoint) and (max-width: v.$tablet-breakpoint) {
+        font-size: v.$font-size-normal-tablet !important;
+    }
+    @media screen and (max-width: v.$mobile-breakpoint) {
+        font-size: v.$font-size-normal-mobile !important;
+    }
+}
+
+@mixin small-text() {
+    @media screen and (min-width: v.$tablet-breakpoint) {
+        font-size: v.$font-size-small-desktop !important;
+    }
+    @media screen and (min-width: v.$mobile-breakpoint) and (max-width: v.$tablet-breakpoint) {
+        font-size: v.$font-size-small-tablet !important;
+    }
+    @media screen and (max-width: v.$mobile-breakpoint) {
+        font-size: v.$font-size-small-mobile !important;
+    }
+}
+
+@mixin tiny-text() {
+    @media screen and (min-width: v.$tablet-breakpoint) {
+        font-size: v.$font-size-tiny-desktop !important;
+    }
+    @media screen and (min-width: v.$mobile-breakpoint) and (max-width: v.$tablet-breakpoint) {
+        font-size: v.$font-size-tiny-tablet !important;
+    }
+    @media screen and (max-width: v.$mobile-breakpoint) {
+        font-size: v.$font-size-tiny-mobile !important;
+    }
+}
+
+@mixin header-text() {
+    @media screen and (min-width: v.$large-breakpoint) {
+        font-size: v.$font-size-tiny-desktop !important;
+    }
+    @media screen and (min-width: v.$mobile-breakpoint) and (max-width: v.$large-breakpoint) {
+        font-size: v.$font-size-tiny-tablet !important;
+    }
+    @media screen and (max-width: v.$mobile-breakpoint) {
+        font-size: v.$font-size-tiny-mobile !important;
+    }
+}
