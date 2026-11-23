@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Skyrocket Events
  * Description: Custom event management and calendar.
- * Version: 1.0.4
+ * Version: 1.0.5
  * Requires PHP: 8.1
  * Text Domain: skyrocket-events
  */

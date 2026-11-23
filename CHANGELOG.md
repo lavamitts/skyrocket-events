@@ -14,3 +14,8 @@
 - Default styling
 - Default imagery
 - Templates moved to the plugin
+
+
+## 1.0.5 - Add repeat icon and simplify event passed logic
+
+- Add repeat icon and simplify event passed logic
