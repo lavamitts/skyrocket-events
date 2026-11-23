@@ -18,12 +18,11 @@ article.pavilion_event {
         font-variant: small-caps;
     }
 
-    $icons: (date, email, facebook, instagram, person, phone, price, stars, time, video, web, pdf, document);
+    $icons: (date, email, facebook, instagram, person, phone, price, stars, time, video, web, pdf, document, repeat);
 
     @each $icon in $icons {
         div.#{$icon},
         p.#{$icon} {
-            // background-image: url("../images/event-icon-#{$icon}.svg");
             background-image: url("../images/event-icon-#{$icon}.png");
         }
     }

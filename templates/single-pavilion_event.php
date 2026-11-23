@@ -212,19 +212,11 @@ while (have_posts()):
 
 
                         <?php if ($has_passed): ?>
-                            <?php if ($has_passed && $frequency === 'none'): ?>
+                            <?php if ($frequency === 'none'): ?>
                                 <p class="skyrocket-event-passed"><strong>Please note:</strong> This event has passed.</p>
                             <?php else: ?>
-                                <p class="skyrocket-event-passed"><strong>Please note:</strong> This event has passed. See <a
-                                        href="#upcoming">upcoming events</a>.</p>
+                                <p class="skyrocket-event-passed"><strong>Please note:</strong> This event has passed. See <a href="#upcoming">upcoming events</a>.</p>
                             <?php endif; ?>
-                        <?php endif; ?>
-
-
-
-                        <?php if ($has_passed && $frequency !== 'none'): ?>
-                            <p class="skyrocket-event-passed"><strong>Please note:</strong> This event has passed. See <a
-                                    href="#upcoming">upcoming events</a>.</p>
                         <?php endif; ?>
 
                     </section>

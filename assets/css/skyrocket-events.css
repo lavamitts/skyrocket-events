@@ -781,6 +781,10 @@ article.pavilion_event div.document,
 article.pavilion_event p.document {
   background-image: url("../images/event-icon-document.png");
 }
+article.pavilion_event div.repeat,
+article.pavilion_event p.repeat {
+  background-image: url("../images/event-icon-repeat.png");
+}
 
 article.pavilion_event div.wp-block-button.image-button a.wp-block-button__link,
 article.pavilion_event div.wp-block-button.image-button a.button {
