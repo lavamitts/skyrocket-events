@@ -33,8 +33,6 @@
 
 - Option to show or hide add to calendar links.
 - Option to link through to main event
-
-# 1.0.9 - Settings enhancements 2
 - show_excerpt_list_view - rename setting
 - show_excerpt_detail_view - option to show or hide the excerpt on the event detail page
 - show_add_to_calendar_links' - option to who or hide the Google and ICS links
