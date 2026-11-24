@@ -19,7 +19,8 @@ function skyrocket_events_calendar_shortcode($atts): string
             'show_month_grid' => true,
             'show_month_list' => true,
             'show_day_view' => true,
-            'show_excerpt' => false,
+            'show_excerpt_list_view' => false,
+            'show_day_badge' => true,
         ];
 
     $enabled_views = [];
@@ -637,7 +638,7 @@ function skyrocket_events_calendar_shortcode($atts): string
                                 <?php } ?>
 
                                 <?php
-                                if (!empty($settings['show_excerpt']) && !empty($item['post_id'])) {
+                                if (!empty($settings['show_excerpt_list_view']) && !empty($item['post_id'])) {
                                     $raw_excerpt = (string) get_post_field('post_excerpt', (int) $item['post_id']);
                                     if (trim($raw_excerpt) !== '') {
                                         echo '<div class="skyrocket-event-excerpt" style="margin-top: 0.25em; font-size: 0.9em; opacity: 0.85;">' . esc_html($raw_excerpt) . '</div>';
@@ -661,6 +662,9 @@ function skyrocket_events_calendar_shortcode($atts): string
 
             <div class="skyrocket-calendar__list-view" style="margin-top: 1.5em;">
                 <?php
+                // Work out whether to show the day badge
+                $day_group_class = ($settings['show_day_badge'] === true) ? 'skyrocket-calendar__list-group' : 'skyrocket-calendar__list-group-plain';
+
                 $today_string = $today->format('Y-m-d');
                 if ($is_compact) {
                     $today_string = $today->format('Y-m-d');
@@ -684,14 +688,21 @@ function skyrocket_events_calendar_shortcode($atts): string
                         $number = $day_dt ? $day_dt->format('j') : '';
                         $month = $day_dt ? $day_dt->format('M') : '';
                         ?>
-                        <div class="skyrocket-calendar__list-group">
-                            <div class="skyrocket-calendar__list-group_day_graphical_device<?php echo $is_today ? ' sclgddd-today' : ''; ?>">
-                                <div class="sclgddd-month"><?= $month ?></div>
-                                <div class="sclgddd-number-day">
-                                    <div class="sclgddd-number"><?= $number ?></div>
-                                    <div class="sclgddd-day"><?= $day ?></div>
+                        <!-- <div class="skyrocket-calendar__list-group"> -->
+                        <div class="<?= $day_group_class ?>">
+                            <?php
+                            if (isset($settings['show_day_badge']) && $settings['show_day_badge'] === true) {
+                                ?>
+                                <div class="skyrocket-calendar__list-group_day_graphical_device<?php echo $is_today ? ' sclgddd-today' : ''; ?>">
+                                    <div class="sclgddd-month"><?= $month ?></div>
+                                    <div class="sclgddd-number-day">
+                                        <div class="sclgddd-number"><?= $number ?></div>
+                                        <div class="sclgddd-day"><?= $day ?></div>
+                                    </div>
                                 </div>
-                            </div>
+                                <?php
+                            }
+                            ?>
                             <div>
                                 <h4>
                                     <?php echo esc_html($day_dt ? $day_dt->format('l, j F Y') : $date_key); ?>
@@ -719,7 +730,7 @@ function skyrocket_events_calendar_shortcode($atts): string
                                             <?php } ?>
 
                                             <?php
-                                            if (!empty($settings['show_excerpt']) && !empty($item['post_id'])) {
+                                            if (!empty($settings['show_excerpt_list_view']) && !empty($item['post_id'])) {
                                                 $raw_excerpt = (string) get_post_field('post_excerpt', (int) $item['post_id']);
                                                 if (trim($raw_excerpt) !== '') {
                                                     echo '<div class="skyrocket-event-excerpt" style="margin-top: 0.25em; font-size: 0.9em; opacity: 0.85;">' . esc_html($raw_excerpt) . '</div>';

@@ -392,25 +392,32 @@
   padding: 0.25rem 0.5rem;
 }
 .skyrocket-calendar__list-group {
-  margin-bottom: 1.5rem;
-  align-items: start;
   display: grid;
   grid-template-columns: 80px 1fr;
   gap: 1rem;
 }
 .skyrocket-calendar__list-group h4 {
+  display: none;
+}
+.skyrocket-calendar__list-group-plain ul.list-view li {
+  padding-left: 0;
+}
+.skyrocket-calendar__list-group, .skyrocket-calendar__list-group-plain {
+  margin-bottom: 1.5rem;
+  align-items: start;
+}
+.skyrocket-calendar__list-group h4, .skyrocket-calendar__list-group-plain h4 {
   margin-bottom: 0.5em;
   border-bottom: 1px solid #ddd;
   padding-bottom: 4px;
-  display: none;
 }
-.skyrocket-calendar__list-group_day_graphical_device {
+.skyrocket-calendar__list-group_day_graphical_device, .skyrocket-calendar__list-group-plain_day_graphical_device {
   align-self: start;
   border-radius: 5px;
   max-width: 5rem;
   box-shadow: 3px 3px 0.75rem rgba(0, 0, 0, 0.2);
 }
-.skyrocket-calendar__list-group_day_graphical_device .sclgddd-month {
+.skyrocket-calendar__list-group_day_graphical_device .sclgddd-month, .skyrocket-calendar__list-group-plain_day_graphical_device .sclgddd-month {
   background-color: #0047ab;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
@@ -419,27 +426,27 @@
   text-align: center;
   text-transform: uppercase;
 }
-.skyrocket-calendar__list-group_day_graphical_device .sclgddd-number-day {
+.skyrocket-calendar__list-group_day_graphical_device .sclgddd-number-day, .skyrocket-calendar__list-group-plain_day_graphical_device .sclgddd-number-day {
   background-color: #ccd9ea;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   text-align: center;
 }
-.skyrocket-calendar__list-group_day_graphical_device .sclgddd-number {
+.skyrocket-calendar__list-group_day_graphical_device .sclgddd-number, .skyrocket-calendar__list-group-plain_day_graphical_device .sclgddd-number {
   color: black;
   font-size: larger;
   font-weight: bold;
   padding-bottom: 0.25rem;
   padding-top: 0.25rem;
 }
-.skyrocket-calendar__list-group_day_graphical_device .sclgddd-day {
+.skyrocket-calendar__list-group_day_graphical_device .sclgddd-day, .skyrocket-calendar__list-group-plain_day_graphical_device .sclgddd-day {
   padding-bottom: 0.25rem;
   text-transform: uppercase;
 }
-.skyrocket-calendar__list-group_day_graphical_device.sclgddd-today .sclgddd-month {
+.skyrocket-calendar__list-group_day_graphical_device.sclgddd-today .sclgddd-month, .skyrocket-calendar__list-group-plain_day_graphical_device.sclgddd-today .sclgddd-month {
   background-color: #f00000;
 }
-.skyrocket-calendar__list-group_day_graphical_device.sclgddd-today .sclgddd-number-day {
+.skyrocket-calendar__list-group_day_graphical_device.sclgddd-today .sclgddd-number-day, .skyrocket-calendar__list-group-plain_day_graphical_device.sclgddd-today .sclgddd-number-day {
   background-color: rgba(240, 0, 0, 0.1);
 }
 .skyrocket-calendar__grid {

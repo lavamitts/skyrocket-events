@@ -11,6 +11,17 @@ require_once __DIR__ . '/includes/single-event-ics-handler.php';
 $site = skyrocket_get_site_details();
 $slug = "skyrocket-events-" . $site['slug'];
 
+$calendar_settings = function_exists('skyrocket_events_get_calendar_settings')
+    ? skyrocket_events_get_calendar_settings()
+    : [
+        'show_add_to_calendar_links' => true,
+        'show_upcoming_events' => true,
+        'show_excerpt_detail_view' => true,
+    ];
+$show_add_to_calendar_links = !empty($calendar_settings['show_add_to_calendar_links']);
+$show_upcoming_events = !empty($calendar_settings['show_upcoming_events']);
+$show_excerpt_detail_view = !empty($calendar_settings['show_excerpt_detail_view']);
+
 get_header();
 
 while (have_posts()):
@@ -148,7 +159,7 @@ while (have_posts()):
                         <h1>
                             <?= esc_html($titleText); ?>
                         </h1>
-                        <?php if (has_excerpt()): ?>
+                        <?php if ((has_excerpt()) && ($show_excerpt_detail_view)): ?>
                             <div class="skyrocket-event-excerpt" style="margin-top: 0.5em; font-size: 1.1em; opacity: 0.9;">
                                 <?php the_excerpt(); ?>
                             </div>
@@ -192,7 +203,7 @@ while (have_posts()):
                             </p>
                         <?php endif; ?>
 
-                        <?php if (!$has_passed): ?>
+                        <?php if (!$has_passed && $show_add_to_calendar_links): ?>
                             <!-- Add to Calendar UI Options -->
                             <div class="skyrocket-add-to-calendar">
                                 <div class="wp-block-button google-button image-button">
@@ -478,7 +489,7 @@ while (have_posts()):
 
                     <?php if ($frequency_label != "One-off event"): ?>
                         <!-- Only show upcoming events if this is not a one-off event -->
-                        <?php if ($upcoming_occurrences): ?>
+                        <?php if (($upcoming_occurrences) && ($show_upcoming_events)): ?>
                             <section id="upcoming" class="skyrocket-event-detail__upcoming">
                                 <h2>Upcoming events</h2>
                                 <ul>

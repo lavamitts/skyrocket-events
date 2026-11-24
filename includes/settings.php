@@ -20,7 +20,11 @@ function skyrocket_events_get_default_settings(): array
         'show_month_grid' => 1,
         'show_month_list' => 1,
         'show_day_view' => 1,
-        'show_excerpt' => 0,
+        'show_excerpt_list_view' => 0,
+        'show_excerpt_detail_view' => 0,
+        'show_add_to_calendar_links' => 1,
+        'show_day_badge' => 1,
+        'show_upcoming_events' => 1,
     ];
 }
 
@@ -44,7 +48,11 @@ function skyrocket_events_get_calendar_settings(): array
         'show_month_grid' => !empty($merged['show_month_grid']),
         'show_month_list' => !empty($merged['show_month_list']),
         'show_day_view' => !empty($merged['show_day_view']),
-        'show_excerpt' => !empty($merged['show_excerpt']),
+        'show_excerpt_list_view' => !empty($merged['show_excerpt_list_view']),
+        'show_excerpt_detail_view' => !empty($merged['show_excerpt_detail_view']),
+        'show_add_to_calendar_links' => !empty($merged['show_add_to_calendar_links']),
+        'show_day_badge' => !empty($merged['show_day_badge']),
+        'show_upcoming_events' => !empty($merged['show_upcoming_events']),
     ];
 
     // Safety fallback in case options were manipulated directly in the database.
@@ -114,7 +122,11 @@ function skyrocket_events_sanitize_settings($input): array
         'show_month_grid' => !empty($input['show_month_grid']) ? 1 : 0,
         'show_month_list' => !empty($input['show_month_list']) ? 1 : 0,
         'show_day_view' => !empty($input['show_day_view']) ? 1 : 0,
-        'show_excerpt' => !empty($input['show_excerpt']) ? 1 : 0,
+        'show_excerpt_list_view' => !empty($input['show_excerpt_list_view']) ? 1 : 0,
+        'show_excerpt_detail_view' => !empty($input['show_excerpt_detail_view']) ? 1 : 0,
+        'show_add_to_calendar_links' => !empty($input['show_add_to_calendar_links']) ? 1 : 0,
+        'show_day_badge' => !empty($input['show_day_badge']) ? 1 : 0,
+        'show_upcoming_events' => !empty($input['show_upcoming_events']) ? 1 : 0,
     ];
 }
 
@@ -228,22 +240,96 @@ function skyrocket_events_render_settings_page(): void
                     </tr>
 
                     <tr>
-                        <th scope="row"><?php esc_html_e('Event details', 'skyrocket-events'); ?></th>
+                        <th scope="row"><?php esc_html_e('Month and day list display', 'skyrocket-events'); ?></th>
                         <td>
-                            <label for="skyrocket-show-excerpt">
-                                <input
-                                    type="checkbox"
-                                    id="skyrocket-show-excerpt"
-                                    name="<?php echo esc_attr(SKYROCKET_EVENTS_OPTION_NAME); ?>[show_excerpt]"
-                                    value="1"
-                                    <?php checked($settings['show_excerpt']); ?> />
-                                <?php esc_html_e('Show event excerpt on calendar?', 'skyrocket-events'); ?>
-                            </label>
-                            <p class="description">
-                                <?php esc_html_e('Displays the event excerpt in month list and day views when enabled. Never shown in month grid view.', 'skyrocket-events'); ?>
-                            </p>
+                            <fieldset>
+                                <legend class="screen-reader-text">
+                                    <span><?php esc_html_e('Month and day list display', 'skyrocket-events'); ?></span>
+                                </legend>
+
+                                <label for="skyrocket-show_day_badge">
+                                    <input
+                                        type="checkbox"
+                                        id="skyrocket-show_day_badge"
+                                        name="<?php echo esc_attr(SKYROCKET_EVENTS_OPTION_NAME); ?>[show_day_badge]"
+                                        value="1"
+                                        <?php checked($settings['show_day_badge']); ?> />
+                                    <?php esc_html_e('Show badge style day indicator in list view?', 'skyrocket-events'); ?>
+                                </label>
+                                <br />
+
+                                <label for="skyrocket-show-excerpt-list-view">
+                                    <input
+                                        type="checkbox"
+                                        id="skyrocket-show-excerpt-list-view"
+                                        name="<?php echo esc_attr(SKYROCKET_EVENTS_OPTION_NAME); ?>[show_excerpt_list_view]"
+                                        value="1"
+                                        <?php checked($settings['show_excerpt_list_view']); ?> />
+                                    <?php esc_html_e('Show event excerpt on calendar list view?', 'skyrocket-events'); ?>
+                                </label>
+                                <p class="description">
+                                    <?php esc_html_e('Displays the event excerpt in month list and day views when enabled. Never shown in month grid view.', 'skyrocket-events'); ?>
+                                </p>
+                                <br />
+
+
+
+
+
+                            </fieldset>
                         </td>
                     </tr>
+
+                    <tr>
+                        <th scope="row">
+                            <?php esc_html_e('Event detail display', 'skyrocket-events'); ?>
+                        </th>
+                        <td>
+                            <fieldset>
+                                <legend class="screen-reader-text">
+                                    <span>
+                                        <?php esc_html_e('Event detail display', 'skyrocket-events'); ?>
+                                    </span>
+                                </legend>
+
+
+                                <label for="skyrocket-show-excerpt-detail-view">
+                                    <input
+                                        type="checkbox"
+                                        id="skyrocket-show-excerpt-detail-view"
+                                        name="<?php echo esc_attr(SKYROCKET_EVENTS_OPTION_NAME); ?>[show_excerpt_detail_view]"
+                                        value="1"
+                                        <?php checked($settings['show_excerpt_detail_view']); ?> />
+                                    <?php esc_html_e('Show event excerpt on event detail view?', 'skyrocket-events'); ?>
+                                </label>
+                                <br />
+
+                                <label for="skyrocket-show_upcoming_events">
+                                    <input
+                                        type="checkbox"
+                                        id="skyrocket-show_upcoming_events"
+                                        name="<?php echo esc_attr(SKYROCKET_EVENTS_OPTION_NAME); ?>[show_upcoming_events]"
+                                        value="1"
+                                        <?php checked($settings['show_upcoming_events']); ?> />
+                                    <?php esc_html_e('Show upcoming events on the event detail page', 'skyrocket-events'); ?>
+                                </label>
+                                <br />
+
+                                <label for="skyrocket-show-add-to-calendar-links">
+                                    <input
+                                        type="checkbox"
+                                        id="skyrocket-show-add-to-calendar-links"
+                                        name="<?php echo esc_attr(SKYROCKET_EVENTS_OPTION_NAME); ?>[show_add_to_calendar_links]"
+                                        value="1"
+                                        <?php checked($settings['show_add_to_calendar_links']); ?> />
+                                    <?php esc_html_e('Show Add to Google Calendar and Download ICS buttons?', 'skyrocket-events'); ?>
+                                </label>
+
+
+                            </fieldset>
+                        </td>
+                    </tr>
+
                 </tbody>
             </table>
 

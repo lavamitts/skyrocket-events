@@ -36,17 +36,32 @@ $cell-height-default: 5rem;
     }
 
     &__list-group {
-        margin-bottom: 1.5rem;
-        align-items: start;
         display: grid;
         grid-template-columns: 80px 1fr;
         gap: 1rem;
 
         h4 {
+            display: none;
+        }
+    }
+
+    &__list-group-plain {
+        ul.list-view {
+            li {
+                padding-left: 0;
+            }
+        }
+    }
+
+    &__list-group,
+    &__list-group-plain {
+        margin-bottom: 1.5rem;
+        align-items: start;
+
+        h4 {
             margin-bottom: 0.5em;
             border-bottom: 1px solid #ddd;
             padding-bottom: 4px;
-            display: none;
         }
 
         $device-corner-radius: 5px;
