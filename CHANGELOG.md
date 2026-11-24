@@ -23,4 +23,8 @@
 - Added a Settings page under Events (below Organisers) so administrators can control which calendar views are available and whether excerpts appear.
 - Enabled administrators to show or hide the month grid, month list, and day views individually, automatically selecting the first enabled view as the default.
 - Hid the view switcher bar when only one calendar view is enabled and prevented saving settings if no views are selected.
-- Added an option to display written event excerpts in list and day views while keeping the grid view uncluttered and leaving blank excerpts hidden.   
+- Added an option to display written event excerpts in list and day views while keeping the grid view uncluttered and leaving blank excerpts hidden.
+
+## 1.0.7 - Bug fixes
+
+- Bug fix on click through to event from event calendar.

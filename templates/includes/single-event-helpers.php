@@ -97,7 +97,7 @@ function pavilion_ui_is_scheduled_date(
         $nth_weekday = (int) (get_post_meta($event_id, '_pavilion_nth_weekday', true) ?: 2);
         $ym_str = $target->format('Y-m');
 
-        $target_date_str = pavilion_get_nth_occurrence_date($ym_str, $nth_weekday, $nth_week, $timezone);
+        $target_date_str = skyrocket_get_nth_occurrence_date($ym_str, $nth_weekday, $nth_week, $timezone);
         return ($target_date_str === $date);
     }
 
