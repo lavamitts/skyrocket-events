@@ -39,3 +39,29 @@ function skyrocket_get_nth_occurrence_date(string $year_month, int $weekday, int
 
     return $first->setDate((int) $first->format('Y'), (int) $first->format('m'), $target_day)->format('Y-m-d');
 }
+
+
+/**
+ * Render an event's excerpt for list or day calendar views if enabled.
+ *
+ * @param int|WP_Post $event Event post ID or object.
+ * @param string      $current_view Current calendar view ('grid', 'list', or 'day').
+ * @param array       $settings Calendar settings array.
+ */
+function skyrocket_events_render_calendar_excerpt($event, string $current_view, array $settings): void
+{
+    if (empty($settings['show_excerpt'])) {
+        return;
+    }
+
+    if (!in_array($current_view, ['list', 'day'], true)) {
+        return;
+    }
+
+    $excerpt = get_the_excerpt($event);
+    if ('' === $excerpt) {
+        return;
+    }
+
+    echo '<div class="skyrocket-calendar__excerpt">' . wp_kses_post(wpautop($excerpt)) . '</div>';
+}

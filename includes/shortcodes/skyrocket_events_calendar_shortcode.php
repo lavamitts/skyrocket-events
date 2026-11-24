@@ -13,6 +13,42 @@ defined('ABSPATH') || exit;
  */
 function skyrocket_events_calendar_shortcode($atts): string
 {
+    $settings = function_exists('skyrocket_events_get_calendar_settings')
+        ? skyrocket_events_get_calendar_settings()
+        : [
+            'show_month_grid' => true,
+            'show_month_list' => true,
+            'show_day_view' => true,
+            'show_excerpt' => false,
+        ];
+
+    $enabled_views = [];
+    if ($settings['show_month_grid']) {
+        $enabled_views[] = 'grid';
+    }
+    if ($settings['show_month_list']) {
+        $enabled_views[] = 'list';
+    }
+    if ($settings['show_day_view']) {
+        $enabled_views[] = 'day';
+    }
+
+    // Fallback safeguard so at least one view is always available.
+    if (empty($enabled_views)) {
+        $enabled_views = ['grid'];
+    }
+
+    // Default view precedence: Month Grid -> Month List -> Day.
+    if ($settings['show_month_grid']) {
+        $default_view = 'grid';
+    } elseif ($settings['show_month_list']) {
+        $default_view = 'list';
+    } else {
+        $default_view = 'day';
+    }
+
+    $show_views_bar = count($enabled_views) > 1;
+
     $site = skyrocket_get_site_details();
     $slug = "skyrocket-events-" . $site['slug'];
 
@@ -36,12 +72,14 @@ function skyrocket_events_calendar_shortcode($atts): string
     if ($is_compact) {
         $view = 'list';
     } else {
-        $view = isset($_GET['skyrocket_view'])
+        $requested_view = isset($_GET['skyrocket_view'])
             ? sanitize_key(wp_unslash($_GET['skyrocket_view']))
             : '';
 
-        if (!in_array($view, ['grid', 'list', 'day'], true)) {
-            $view = 'grid';
+        if (!in_array($requested_view, $enabled_views, true)) {
+            $view = $default_view;
+        } else {
+            $view = $requested_view;
         }
     }
 
@@ -156,7 +194,7 @@ function skyrocket_events_calendar_shortcode($atts): string
         if ($original_start && $original_end > $original_start) {
             $duration = $original_end->getTimestamp() - $original_start->getTimestamp();
         } elseif ($frequency === 'monthly_nth' && $start_value) {
-            // Fallback calculation for monthly_nth if original_start object wasn't built yet
+            // Fallback calculation for monthly_nth if original_start object wasn't built yet.
             $temp_start_time = DateTimeImmutable::createFromFormat('!Y-m-d\TH:i', $start_value, $timezone);
             $temp_end_time = DateTimeImmutable::createFromFormat('!Y-m-d\TH:i', $end_value, $timezone);
             if ($temp_start_time && $temp_end_time && $temp_end_time > $temp_start_time) {
@@ -196,7 +234,7 @@ function skyrocket_events_calendar_shortcode($atts): string
             $sequence_start = $start_value ? DateTimeImmutable::createFromFormat('!Y-m-d\TH:i', $start_value, $timezone) : null;
             $sequence_start_date = $sequence_start ? $sequence_start->setTime(0, 0) : null;
 
-            // Loop through each month present in the view range
+            // Loop through each month present in the view range.
             $iter_month = $first->modify('first day of this month');
             while ($iter_month <= $last) {
                 $ym_str = $iter_month->format('Y-m');
@@ -213,7 +251,7 @@ function skyrocket_events_calendar_shortcode($atts): string
                             $original_date_key = $occurrence_date->format('Y-m-d');
                             $exception = $exceptions[$original_date_key] ?? null;
 
-                            // Handle exception logic
+                            // Handle exception logic.
                             if (is_array($exception)) {
                                 $action = $exception['action'] ?? '';
                                 if ($action === 'cancel') {
@@ -259,7 +297,7 @@ function skyrocket_events_calendar_shortcode($atts): string
                 $iter_month = $iter_month->modify('+1 month');
             }
 
-            // Check for moved exceptions falling into this month whose original dates might be outside
+            // Check for moved exceptions falling into this month whose original dates might be outside.
             foreach ($exceptions as $exception_date => $exception) {
                 if (!is_array($exception) || ($exception['action'] ?? '') !== 'move') {
                     continue;
@@ -284,6 +322,7 @@ function skyrocket_events_calendar_shortcode($atts): string
                 }
                 if (!$already_added) {
                     $days[$moved_date_key][] = [
+                        'post_id' => $event->ID,
                         'title' => get_the_title($event),
                         'url' => add_query_arg('occurrence', $moved_date_key, get_permalink($event)),
                         'start' => $moved_start,
@@ -295,7 +334,7 @@ function skyrocket_events_calendar_shortcode($atts): string
             continue;
         }
 
-        // Standard frequencies loop
+        // Standard frequencies loop.
         for (
             $date = $first;
             $date <= $last;
@@ -391,6 +430,7 @@ function skyrocket_events_calendar_shortcode($atts): string
                         $moved_date_key = $moved_start->format('Y-m-d');
 
                         $days[$moved_date_key][] = [
+                            'post_id' => $event->ID,
                             'title' => get_the_title($event),
                             'url' => add_query_arg(
                                 'occurrence',
@@ -416,6 +456,7 @@ function skyrocket_events_calendar_shortcode($atts): string
             );
 
             $days[$original_date_key][] = [
+                'post_id' => $event->ID,
                 'title' => get_the_title($event),
                 'url' => add_query_arg(
                     'occurrence',
@@ -477,6 +518,7 @@ function skyrocket_events_calendar_shortcode($atts): string
             $moved_date_key = $moved_start->format('Y-m-d');
 
             $days[$moved_date_key][] = [
+                'post_id' => $event->ID,
                 'title' => get_the_title($event),
                 'url' => add_query_arg(
                     'occurrence',
@@ -531,7 +573,7 @@ function skyrocket_events_calendar_shortcode($atts): string
     ob_start();
     ?>
 
-    <?php if (!$is_compact && !isset($_GET['skyrocket_view'])): ?>
+    <?php if (!$is_compact && !isset($_GET['skyrocket_view']) && $settings['show_month_list']): ?>
         <script>
             if (window.innerWidth <= 689) {
                 const url = new URL(window.location.href);
@@ -543,14 +585,20 @@ function skyrocket_events_calendar_shortcode($atts): string
 
     <div
         class="skyrocket-calendar <?= $slug ?>  skyrocket-calendar--<?php echo esc_attr($view); ?><?php echo $is_compact ? ' skyrocket-calendar--compact' : ''; ?>">
-        <?php if (!$is_compact): ?>
-            <div class="skyrocket-calendar__views">
-                <a id="month-grid-button" href="<?php echo esc_url($grid_url); ?>"
-                    class="button <?php echo $view === 'grid' ? 'button-primary' : ''; ?>">Month view</a>
-                <a id="month-list-button" href="<?php echo esc_url($list_url); ?>"
-                    class="button <?php echo $view === 'list' ? 'button-primary' : ''; ?>">List view</a>
-                <a id="day-list-button" href="<?php echo esc_url($day_url); ?>"
-                    class="button <?php echo $view === 'day' ? 'button-primary' : ''; ?>">Daily view</a>
+        <?php if (!$is_compact && $show_views_bar): ?>
+            <div class="skyrocket-calendar__views" role="tablist">
+                <?php if ($settings['show_month_grid']): ?>
+                    <a id="month-grid-button" href="<?php echo esc_url($grid_url); ?>"
+                        class="button <?php echo $view === 'grid' ? 'button-primary' : ''; ?>">Month view</a>
+                <?php endif; ?>
+                <?php if ($settings['show_month_list']): ?>
+                    <a id="month-list-button" href="<?php echo esc_url($list_url); ?>"
+                        class="button <?php echo $view === 'list' ? 'button-primary' : ''; ?>">List view</a>
+                <?php endif; ?>
+                <?php if ($settings['show_day_view']): ?>
+                    <a id="day-list-button" href="<?php echo esc_url($day_url); ?>"
+                        class="button <?php echo $view === 'day' ? 'button-primary' : ''; ?>">Daily view</a>
+                <?php endif; ?>
             </div>
         <?php endif; ?>
 
@@ -564,7 +612,6 @@ function skyrocket_events_calendar_shortcode($atts): string
                 <a href="<?php echo esc_url($next_url); ?>" aria-label="Next day" class="next-day">Next day <?= $NEXT_ARROW ?></a>
             </div>
 
-            <!-- <p>this is the day view</p> -->
             <div class="skyrocket-calendar__day-view" style="margin-top: 1.5em;">
                 <?php $day_key = $first->format('Y-m-d'); ?>
                 <?php if (empty($days[$day_key])): ?>
@@ -573,7 +620,6 @@ function skyrocket_events_calendar_shortcode($atts): string
                     <h2>Events scheduled for <?php echo esc_html($first->format('l, j F Y')); ?></h2>
                     <ul class="skyrocket-calendar__list list-view">
                         <?php foreach ($days[$day_key] as $item): ?>
-
                             <li>
                                 <?php $is_event_private = is_event_private($item['title']); ?>
                                 <?php if ($is_event_private) { ?>
@@ -581,7 +627,6 @@ function skyrocket_events_calendar_shortcode($atts): string
                                         <?php echo esc_html($item['start']->format('H:i') . ' - ' . $item['end']->format('H:i')); ?>
                                     </strong>:
                                     <span class="private-event"><?php echo esc_html($item['title']); ?></span>
-
                                 <?php } else { ?>
                                     <a href="<?php echo esc_url($item['url']); ?>" style="text-decoration: none; color: inherit;">
                                         <strong>
@@ -589,14 +634,13 @@ function skyrocket_events_calendar_shortcode($atts): string
                                         </strong>:
                                         <?php echo esc_html($item['title']); ?>
                                     </a>
-
                                 <?php } ?>
 
                                 <?php
-                                if (!empty($item['post_id'])) {
-                                    $event_excerpt = get_the_excerpt($item['post_id']);
-                                    if (!empty($event_excerpt)) {
-                                        echo '<div class="skyrocket-event-excerpt" style="margin-top: 0.25em; font-size: 0.9em; opacity: 0.85;">' . esc_html($event_excerpt) . '</div>';
+                                if (!empty($settings['show_excerpt']) && !empty($item['post_id'])) {
+                                    $raw_excerpt = (string) get_post_field('post_excerpt', (int) $item['post_id']);
+                                    if (trim($raw_excerpt) !== '') {
+                                        echo '<div class="skyrocket-event-excerpt" style="margin-top: 0.25em; font-size: 0.9em; opacity: 0.85;">' . esc_html($raw_excerpt) . '</div>';
                                     }
                                 }
                                 ?>
@@ -615,7 +659,6 @@ function skyrocket_events_calendar_shortcode($atts): string
                 <a href="<?php echo esc_url($next_url); ?>" aria-label="Next month" class="next-month">Next month <?= $NEXT_ARROW ?></a>
             </div>
 
-            <!-- <p>This is the month list view</p> -->
             <div class="skyrocket-calendar__list-view" style="margin-top: 1.5em;">
                 <?php
                 $today_string = $today->format('Y-m-d');
@@ -637,9 +680,9 @@ function skyrocket_events_calendar_shortcode($atts): string
                         $now_dt = new DateTimeImmutable('now', $timezone);
                         $is_today = $day_dt instanceof DateTimeImmutable
                             && $day_dt->format('Y-m-d') === $now_dt->format('Y-m-d');
-                        $day = $day_dt ? $day_dt->format('D') : ''; // Mon, Tue, Wed
-                        $number = $day_dt ? $day_dt->format('j') : ''; // 1, 2, 24
-                        $month = $day_dt ? $day_dt->format('M') : ''; // Jan, Feb, Mar
+                        $day = $day_dt ? $day_dt->format('D') : '';
+                        $number = $day_dt ? $day_dt->format('j') : '';
+                        $month = $day_dt ? $day_dt->format('M') : '';
                         ?>
                         <div class="skyrocket-calendar__list-group">
                             <div class="skyrocket-calendar__list-group_day_graphical_device<?php echo $is_today ? ' sclgddd-today' : ''; ?>">
@@ -664,7 +707,6 @@ function skyrocket_events_calendar_shortcode($atts): string
                                                 <span class="private-event">
                                                     <?php echo esc_html($item['title']); ?>
                                                 </span>
-
                                             <?php } else { ?>
                                                 <a href="<?php echo esc_url($item['url']); ?>" style="text-decoration: none; color: inherit;">
                                                     <strong class="list-view-time">
@@ -675,6 +717,15 @@ function skyrocket_events_calendar_shortcode($atts): string
                                                     </span>
                                                 </a>
                                             <?php } ?>
+
+                                            <?php
+                                            if (!empty($settings['show_excerpt']) && !empty($item['post_id'])) {
+                                                $raw_excerpt = (string) get_post_field('post_excerpt', (int) $item['post_id']);
+                                                if (trim($raw_excerpt) !== '') {
+                                                    echo '<div class="skyrocket-event-excerpt" style="margin-top: 0.25em; font-size: 0.9em; opacity: 0.85;">' . esc_html($raw_excerpt) . '</div>';
+                                                }
+                                            }
+                                            ?>
                                         </li>
                                     <?php endforeach; ?>
                                 </ul>
