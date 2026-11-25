@@ -142,25 +142,30 @@ while (have_posts()):
     }
     ?>
 
+    <?php skyrocket_render_single_event_banner($event_id); ?>
     <div class="ct-container <?= $slug ?>">
         <main id="primary" class="site-main skyrocket-event-detail">
             <article <?php post_class('skyrocket-event-detail__article'); ?>>
                 <div class="hero-section is-width-constrained" data-type="type-1">
                     <header class="skyrocket-event-detail__header">
+                        <?php
+                        $breadcrumb = skyrocket_events_get_breadcrumb_data($calendar_settings);
+                        ?>
                         <nav class="ct-breadcrumbs" aria-label="Breadcrumb">
                             <a href="<?php echo esc_url(home_url('/')); ?>">Home</a>
                             <span class="separator">/</span>
-                            <a href="<?php echo esc_url(home_url('/events/')); ?>">Events</a>
+                            <a href="<?php echo esc_url($breadcrumb['url']); ?>"><?php echo esc_html($breadcrumb['label']); ?></a>
                             <span class="separator">/</span>
                             <span aria-current="page">
                                 <?php echo esc_html($titleText); ?>
                             </span>
                         </nav>
+
                         <h1>
                             <?= esc_html($titleText); ?>
                         </h1>
                         <?php if ((has_excerpt()) && ($show_excerpt_detail_view)): ?>
-                            <div class="skyrocket-event-excerpt" style="margin-top: 0.5em; font-size: 1.1em; opacity: 0.9;">
+                            <div class="skyrocket-event-excerpt">
                                 <?php the_excerpt(); ?>
                             </div>
                         <?php endif; ?>

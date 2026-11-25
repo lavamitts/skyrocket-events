@@ -38,3 +38,9 @@
 - show_add_to_calendar_links' - option to who or hide the Google and ICS links
 - show_day_badge - option to show or hide the day badge (versus a simple day heading) on the lister view
 - show_upcoming_events - option to show or hide the upcoming events links on the event detail page
+
+## 1.0.9 - Enhancements and bug fixes
+
+- Show date on the ul tag in the list view
+- Mobile styling
+- Rolling list and accompanying options

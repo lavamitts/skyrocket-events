@@ -37,8 +37,17 @@ $cell-height-default: 5rem;
 
     &__list-group {
         display: grid;
-        grid-template-columns: 80px 1fr;
-        gap: 1rem;
+
+        // Smaller screens
+        @media (max-width: v.$mobile-breakpoint) {
+            grid-template-columns: 60px 1fr;
+            gap: 0.5rem;
+        }
+        // Larger screens
+        @media (min-width: v.$mobile-breakpoint) {
+            grid-template-columns: 80px 1fr;
+            gap: 1rem;
+        }
 
         h4 {
             display: none;
@@ -92,8 +101,10 @@ $cell-height-default: 5rem;
                 color: black;
                 font-size: larger;
                 font-weight: bold;
-                padding-bottom: 0.25rem;
-                padding-top: 0.25rem;
+                @media (min-width: v.$mobile-breakpoint) {
+                    padding-bottom: 0.25rem;
+                    padding-top: 0.25rem;
+                }
             }
             .sclgddd-day {
                 padding-bottom: 0.25rem;
@@ -198,11 +209,22 @@ ul.list-view {
     font-size: 16px;
 
     li {
-        padding: 0.5rem;
+        padding-bottom: 1rem;
         list-style-type: none !important;
 
-        strong.list-view-time {
-            // display: block;
+        @media (max-width: v.$mobile-breakpoint) {
+            span {
+                display: block;
+            }
         }
+    }
+}
+
+.skyrocket-event-excerpt {
+    margin-top: 0.5em;
+    opacity: 0.9;
+
+    @media (max-width: v.$mobile-breakpoint) {
+        display: none;
     }
 }

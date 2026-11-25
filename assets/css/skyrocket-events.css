@@ -393,8 +393,18 @@
 }
 .skyrocket-calendar__list-group {
   display: grid;
-  grid-template-columns: 80px 1fr;
-  gap: 1rem;
+}
+@media (max-width: 689px) {
+  .skyrocket-calendar__list-group {
+    grid-template-columns: 60px 1fr;
+    gap: 0.5rem;
+  }
+}
+@media (min-width: 689px) {
+  .skyrocket-calendar__list-group {
+    grid-template-columns: 80px 1fr;
+    gap: 1rem;
+  }
 }
 .skyrocket-calendar__list-group h4 {
   display: none;
@@ -436,8 +446,12 @@
   color: black;
   font-size: larger;
   font-weight: bold;
-  padding-bottom: 0.25rem;
-  padding-top: 0.25rem;
+}
+@media (min-width: 689px) {
+  .skyrocket-calendar__list-group_day_graphical_device .sclgddd-number, .skyrocket-calendar__list-group-plain_day_graphical_device .sclgddd-number {
+    padding-bottom: 0.25rem;
+    padding-top: 0.25rem;
+  }
 }
 .skyrocket-calendar__list-group_day_graphical_device .sclgddd-day, .skyrocket-calendar__list-group-plain_day_graphical_device .sclgddd-day {
   padding-bottom: 0.25rem;
@@ -522,9 +536,25 @@ ul.list-view {
   font-size: 16px;
 }
 ul.list-view li {
-  padding: 0.5rem;
+  padding-bottom: 1rem;
   list-style-type: none !important;
 }
+@media (max-width: 689px) {
+  ul.list-view li span {
+    display: block;
+  }
+}
+
+.skyrocket-event-excerpt {
+  margin-top: 0.5em;
+  opacity: 0.9;
+}
+@media (max-width: 689px) {
+  .skyrocket-event-excerpt {
+    display: none;
+  }
+}
+
 .skyrocket-event-detail {
   padding: 2rem 0 0 0;
   margin-left: auto;
@@ -892,4 +922,8 @@ article.pavilion_event div.wp-block-button.ics-button a.wp-block-button__link {
     background-image: url("../images/day-icon-simple.svg");
     min-width: 8.5rem;
   }
+}
+
+.skyrocket-event-detail__banner {
+  display: none;
 }

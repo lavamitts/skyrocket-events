@@ -31,3 +31,4 @@ node_modules/
 
 # Local guidance
 GUIDANCE.md
+deploy.sh

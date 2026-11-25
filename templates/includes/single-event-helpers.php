@@ -181,3 +181,32 @@ function pavilion_ui_ics_download_url(
         add_query_arg($args, admin_url('admin-post.php'))
     );
 }
+
+/**
+ * Retrieve the calendar breadcrumb slug, URL, and human-readable label.
+ *
+ * @param array<string, mixed>|null $calendar_settings Optional pre-fetched settings array.
+ * @return array{slug: string, url: string, label: string}
+ */
+function skyrocket_events_get_breadcrumb_data(?array $calendar_settings = null): array
+{
+    if ($calendar_settings === null) {
+        $calendar_settings = function_exists('skyrocket_events_get_calendar_settings')
+            ? skyrocket_events_get_calendar_settings()
+            : [];
+    }
+
+    $slug = !empty($calendar_settings['breadcrumb_slug'])
+        ? trim((string) $calendar_settings['breadcrumb_slug'], '/')
+        : 'events';
+
+    if ($slug === '') {
+        $slug = 'events';
+    }
+
+    return [
+        'slug' => $slug,
+        'url' => home_url('/' . $slug . '/'),
+        'label' => ucwords(str_replace(['-', '_'], ' ', $slug)),
+    ];
+}

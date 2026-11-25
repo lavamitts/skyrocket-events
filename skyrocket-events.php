@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Skyrocket Events
  * Description: Custom event management and calendar.
- * Version: 1.0.8
+ * Version: 1.0.9
  * Requires PHP: 8.1
  * Text Domain: skyrocket-events
  */
@@ -39,6 +39,7 @@ require_once SKYROCKET_EVENTS_PATH . 'includes/venues.php';
 require_once SKYROCKET_EVENTS_PATH . 'includes/assets.php';
 require_once SKYROCKET_EVENTS_PATH . 'includes/include-events-in-search.php';
 require_once SKYROCKET_EVENTS_PATH . 'includes/templates.php';
+require_once SKYROCKET_EVENTS_PATH . 'includes/single-event-header.php';
 
 /**
  * Load event editor JavaScript.
