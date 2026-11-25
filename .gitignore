@@ -29,6 +29,6 @@ node_modules/
 # Distributions
 /dist/
 
-# Local guidance
-GUIDANCE.md
+# Local build tools
+build.sh
 deploy.sh
