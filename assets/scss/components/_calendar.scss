@@ -228,3 +228,10 @@ ul.list-view {
         display: none;
     }
 }
+
+// Adds a colon to the time indicator
+.time-indicator {
+    &::after {
+        content: " : " !important;
+    }
+}

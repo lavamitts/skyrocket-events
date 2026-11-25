@@ -52,3 +52,7 @@
 - Admin lister enhancements
   - Metaboxes for changes above
   - Add repeat, start and end dates to the event lister in admin
+
+## 1.1.1 - Event categories
+
+- Added event categories

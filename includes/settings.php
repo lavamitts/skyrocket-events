@@ -28,6 +28,7 @@ function skyrocket_events_get_default_settings(): array
         'show_day_badge' => 1,
         'show_upcoming_events' => 1,
         'show_event_breadcrumbs' => 1,
+        'show_all_day_indicator' => 1,
         'breadcrumb_slug' => 'events',
     ];
 }
@@ -72,6 +73,7 @@ function skyrocket_events_get_calendar_settings(): array
         'show_day_badge' => !empty($merged['show_day_badge']),
         'show_upcoming_events' => !empty($merged['show_upcoming_events']),
         'show_event_breadcrumbs' => !empty($merged['show_event_breadcrumbs']),
+        'show_all_day_indicator' => !empty($merged['show_all_day_indicator']),
         'breadcrumb_slug' => $breadcrumb_slug,
     ];
 
@@ -163,6 +165,7 @@ function skyrocket_events_sanitize_settings($input): array
         'show_day_badge' => !empty($input['show_day_badge']) ? 1 : 0,
         'show_upcoming_events' => !empty($input['show_upcoming_events']) ? 1 : 0,
         'show_event_breadcrumbs' => !empty($input['show_event_breadcrumbs']) ? 1 : 0,
+        'show_all_day_indicator' => !empty($input['show_all_day_indicator']) ? 1 : 0,
     ];
 }
 
@@ -246,7 +249,6 @@ function skyrocket_events_render_settings_page(): void
                                     <?php esc_html_e('Show event breadcrumbs?', 'skyrocket-events'); ?>
                                 </label>
                                 <br />
-
 
                                 <label for="skyrocket-breadcrumb-slug" style="display: inline-block; margin-top: 0.5em;">
                                     <?php esc_html_e('Breadcrumb calendar page slug:', 'skyrocket-events'); ?>
@@ -358,6 +360,17 @@ function skyrocket_events_render_settings_page(): void
                                         value="1"
                                         <?php checked($settings['show_day_badge']); ?> />
                                     <?php esc_html_e('Show badge style day indicator in list view?', 'skyrocket-events'); ?>
+                                </label>
+                                <br />
+
+                                <label for="skyrocket-show_all_day_indicator">
+                                    <input
+                                        type="checkbox"
+                                        id="skyrocket-show_all_day_indicator"
+                                        name="<?php echo esc_attr(SKYROCKET_EVENTS_OPTION_NAME); ?>[show_all_day_indicator]"
+                                        value="1"
+                                        <?php checked($settings['show_all_day_indicator']); ?> />
+                                    <?php esc_html_e('Show all day indicator?', 'skyrocket-events'); ?>
                                 </label>
                                 <br />
 

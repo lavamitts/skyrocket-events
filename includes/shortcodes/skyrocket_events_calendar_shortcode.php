@@ -23,10 +23,14 @@ function skyrocket_events_calendar_shortcode($atts): string
             'show_day_view' => true,
             'show_excerpt_list_view' => false,
             'show_day_badge' => true,
+            'show_all_day_indicator' => true,
         ];
+
 
     $show_rolling_list = $settings['show_rolling_list'] ?? true;
     $rolling_list_days = isset($settings['rolling_list_days']) ? (int) $settings['rolling_list_days'] : 56;
+
+    $show_all_day_indicator = $settings['show_all_day_indicator'] ?? true;
 
     $enabled_views = [];
     if ($settings['show_month_grid']) {
@@ -175,6 +179,18 @@ function skyrocket_events_calendar_shortcode($atts): string
             ? true
             : ($raw_click_through === '1');
 
+        $term_slugs = wp_get_post_terms($event->ID, 'pavilion_event_category', ['fields' => 'slugs']);
+        $category_classes = '';
+        if (is_array($term_slugs) && !empty($term_slugs)) {
+            $sanitised_slugs = array_filter(array_map(
+                static function ($term_slug): string {
+                    return is_string($term_slug) ? sanitize_html_class($term_slug) : '';
+                },
+                $term_slugs
+            ));
+            $category_classes = implode(' ', array_unique($sanitised_slugs));
+        }
+
         $start_value = get_post_meta(
             $event->ID,
             '_pavilion_start',
@@ -306,6 +322,7 @@ function skyrocket_events_calendar_shortcode($atts): string
                                                 'end' => $moved_end,
                                                 'all_day' => $is_all_day,
                                                 'click_through' => $allow_click_through,
+                                                'category_classes' => $category_classes,
                                             ];
                                         }
                                     }
@@ -325,6 +342,7 @@ function skyrocket_events_calendar_shortcode($atts): string
                                     'end' => $occurrence_end,
                                     'all_day' => $is_all_day,
                                     'click_through' => $allow_click_through,
+                                    'category_classes' => $category_classes,
                                 ];
                             }
                         }
@@ -365,6 +383,7 @@ function skyrocket_events_calendar_shortcode($atts): string
                         'end' => $moved_end,
                         'all_day' => $is_all_day,
                         'click_through' => $allow_click_through,
+                        'category_classes' => $category_classes,
                     ];
                 }
             }
@@ -491,6 +510,7 @@ function skyrocket_events_calendar_shortcode($atts): string
                             'end' => $moved_end,
                             'all_day' => $is_all_day,
                             'click_through' => $allow_click_through,
+                            'category_classes' => $category_classes,
                         ];
                     }
 
@@ -519,6 +539,7 @@ function skyrocket_events_calendar_shortcode($atts): string
                 'end' => $occurrence_end,
                 'all_day' => $is_all_day,
                 'click_through' => $allow_click_through,
+                'category_classes' => $category_classes,
             ];
         }
 
@@ -583,6 +604,7 @@ function skyrocket_events_calendar_shortcode($atts): string
                 'end' => $moved_end,
                 'all_day' => $is_all_day,
                 'click_through' => $allow_click_through,
+                'category_classes' => $category_classes,
             ];
         }
     }
@@ -708,19 +730,20 @@ function skyrocket_events_calendar_shortcode($atts): string
                                 ? 'All day'
                                 : $item['start']->format('H:i') . ' - ' . $item['end']->format('H:i');
                             $can_click = ($item['click_through'] ?? true) === true;
+                            $li_class = $item['category_classes'] ?? '';
                             ?>
-                            <li>
+                            <li<?php echo $li_class !== '' ? ' class="' . esc_attr($li_class) . '"' : ''; ?>>
                                 <?php $is_event_private = is_event_private($item['title']); ?>
                                 <?php if ($is_event_private) { ?>
-                                    <strong>
+                                    <strong class="time-indicator">
                                         <?php echo esc_html($time_label); ?>
-                                    </strong>:
+                                    </strong>
                                     <span class="private-event"><?php echo esc_html($item['title']); ?></span>
                                 <?php } elseif ($can_click) { ?>
                                     <a href="<?php echo esc_url($item['url']); ?>" style="text-decoration: none; color: inherit;">
-                                        <strong>
+                                        <strong class="time-indicator">
                                             <?php echo esc_html($time_label); ?>
-                                        </strong>:
+                                        </strong>
                                         <?php echo esc_html($item['title']); ?>
                                     </a>
                                 <?php } else { ?>
@@ -738,8 +761,8 @@ function skyrocket_events_calendar_shortcode($atts): string
                                     }
                                 }
                                 ?>
-                            </li>
-                        <?php endforeach; ?>
+                                </li>
+                            <?php endforeach; ?>
                     </ul>
                 <?php endif; ?>
             </div>
@@ -794,29 +817,30 @@ function skyrocket_events_calendar_shortcode($atts): string
                                             ? 'All day'
                                             : $item['start']->format('H:i') . ' - ' . $item['end']->format('H:i');
                                         $can_click = ($item['click_through'] ?? true) === true;
+                                        $li_class = $item['category_classes'] ?? '';
                                         ?>
-                                        <li>
+                                        <li<?php echo $li_class !== '' ? ' class="' . esc_attr($li_class) . '"' : ''; ?>>
                                             <?php $is_event_private = is_event_private($item['title']); ?>
                                             <?php if ($is_event_private): ?>
-                                                <strong>
+                                                <strong class="time-indicator">
                                                     <?php echo esc_html($time_label); ?>
-                                                </strong>:
+                                                </strong>
                                                 <span class="private-event">
                                                     <?php echo esc_html($item['title']); ?>
                                                 </span>
                                             <?php elseif ($can_click): ?>
                                                 <a href="<?php echo esc_url($item['url']); ?>" style="text-decoration: none; color: inherit;">
-                                                    <strong class="list-view-time">
+                                                    <strong class="list-view-time time-indicator">
                                                         <?php echo esc_html($time_label); ?>
-                                                    </strong>:
+                                                    </strong>
                                                     <span>
                                                         <?php echo esc_html($item['title']); ?>
                                                     </span>
                                                 </a>
                                             <?php else: ?>
-                                                <strong class="list-view-time">
+                                                <strong class="list-view-time time-indicator">
                                                     <?php echo esc_html($time_label); ?>
-                                                </strong>:
+                                                </strong>
                                                 <span>
                                                     <?php echo esc_html($item['title']); ?>
                                                 </span>
@@ -830,8 +854,8 @@ function skyrocket_events_calendar_shortcode($atts): string
                                                 }
                                             }
                                             ?>
-                                        </li>
-                                    <?php endforeach; ?>
+                                            </li>
+                                        <?php endforeach; ?>
                                 </ul>
                             </div>
                         </div>
@@ -903,29 +927,30 @@ function skyrocket_events_calendar_shortcode($atts): string
                                             ? 'All day'
                                             : $item['start']->format('H:i') . ' - ' . $item['end']->format('H:i');
                                         $can_click = ($item['click_through'] ?? true) === true;
+                                        $li_class = $item['category_classes'] ?? '';
                                         ?>
-                                        <li>
+                                        <li<?php echo $li_class !== '' ? ' class="' . esc_attr($li_class) . '"' : ''; ?>>
                                             <?php $is_event_private = is_event_private($item['title']); ?>
                                             <?php if ($is_event_private): ?>
-                                                <strong>
+                                                <strong class="time-indicator">
                                                     <?php echo esc_html($time_label); ?>
-                                                </strong>:
+                                                </strong>
                                                 <span class="private-event">
                                                     <?php echo esc_html($item['title']); ?>
                                                 </span>
                                             <?php elseif ($can_click): ?>
                                                 <a href="<?php echo esc_url($item['url']); ?>" style="text-decoration: none; color: inherit;">
-                                                    <strong class="list-view-time">
+                                                    <strong class="list-view-time time-indicator">
                                                         <?php echo esc_html($time_label); ?>
-                                                    </strong>:
+                                                    </strong>
                                                     <span>
                                                         <?php echo esc_html($item['title']); ?>
                                                     </span>
                                                 </a>
                                             <?php else: ?>
-                                                <strong class="list-view-time">
+                                                <strong class="list-view-time time-indicator">
                                                     <?php echo esc_html($time_label); ?>
-                                                </strong>:
+                                                </strong>
                                                 <span>
                                                     <?php echo esc_html($item['title']); ?>
                                                 </span>
@@ -939,8 +964,8 @@ function skyrocket_events_calendar_shortcode($atts): string
                                                 }
                                             }
                                             ?>
-                                        </li>
-                                    <?php endforeach; ?>
+                                            </li>
+                                        <?php endforeach; ?>
                                 </ul>
                             </div>
                         </div>
