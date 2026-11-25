@@ -44,3 +44,11 @@
 - Show date on the ul tag in the list view
 - Mobile styling
 - Rolling list and accompanying options
+
+## 1.1.0 - Annual events, all day events, admin lister enhancements
+
+- Allow repeated annual events
+- Allow all day events
+- Admin lister enhancements
+  - Metaboxes for changes above
+  - Add repeat, start and end dates to the event lister in admin

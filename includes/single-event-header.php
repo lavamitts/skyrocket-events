@@ -1,4 +1,27 @@
 <?php
+/**
+ * Single event banner widget area registration, rendering, and activation setup.
+ *
+ * Registers the `skyrocket-single-event-banner` sidebar used on single
+ * `pavilion_event` templates, outputs its markup with the event's featured
+ * image applied as an inline background, and seeds an empty Custom HTML
+ * widget on plugin activation so the widget area appears ready to edit in
+ * WordPress Appearance > Widgets.
+ *
+ * @package Skyrocket_Events
+ */
+
+/**
+ * Register the Single Event Banner widget area (sidebar).
+ *
+ * Creates the `skyrocket-single-event-banner` sidebar so site administrators
+ * can place blocks or Custom HTML widgets above single event details. Widget
+ * titles are hidden visually using WordPress's `screen-reader-text` class.
+ *
+ * @hook widgets_init
+ *
+ * @return void
+ */
 add_action('widgets_init', function () {
     register_sidebar([
         'name' => __('Single Event Banner', 'skyrocket-events'),
@@ -11,7 +34,20 @@ add_action('widgets_init', function () {
     ]);
 });
 
-
+/**
+ * Render the single event banner section if the sidebar contains non-empty output.
+ *
+ * Captures the rendered HTML of the `skyrocket-single-event-banner` sidebar via
+ * output buffering. If the sidebar is inactive or produces only whitespace,
+ * nothing is output so empty banner containers are never rendered.
+ *
+ * When the event post has a featured image, its full-size URL is injected as both
+ * a CSS custom property (`--skyrocket-event-bg`) and inline `background-image`
+ * cover rules on the `<section>` wrapper.
+ *
+ * @param int $event_id The post ID of the `pavilion_event` being rendered.
+ * @return void Outputs HTML directly when widget content is present.
+ */
 function skyrocket_render_single_event_banner(int $event_id): void
 {
     if (!is_active_sidebar('skyrocket-single-event-banner')) {
@@ -44,6 +80,25 @@ function skyrocket_render_single_event_banner(int $event_id): void
     <?php
 }
 
+/**
+ * Seed a default Custom HTML widget in the Single Event Banner sidebar on activation.
+ *
+ * Inspects `sidebars_widgets` and `widget_custom_html` options on plugin activation:
+ * - Exits early if `skyrocket-single-event-banner` already has widgets assigned,
+ *   preserving existing site configuration across reactivations.
+ * - Finds the highest existing numeric instance key in `widget_custom_html` and
+ *   allocates the next sequential integer ID.
+ * - Inserts a placeholder `<div></div>` Custom HTML widget instance and assigns
+ *   it to `skyrocket-single-event-banner` so the banner area renders immediately
+ *   and is visible in the Widgets screen.
+ *
+ * Note: `register_activation_hook(__FILE__, ...)` requires this code to reside in
+ * the main plugin bootstrap file (or receive the main plugin file path) to fire.
+ *
+ * @hook register_activation_hook
+ *
+ * @return void
+ */
 register_activation_hook(__FILE__, function () {
     $sidebar_id = 'skyrocket-single-event-banner';
     $sidebars = get_option('sidebars_widgets', []);
